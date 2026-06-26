@@ -1,82 +1,51 @@
 name: adguard_home_manager
 description: AdGuard Home client
-
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-# In Windows, build-name is used as the major, minor, and patch parts
-# of the product and file versions while build-number is used as the build suffix.
+publish_to: 'none'
 version: 2.22.0+154
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
 
-scripts:
-  build:
-    linux: "./linux/build-app.sh"
-
-# Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
-# the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
-dependencies: any
+dependencies:
   flutter:
-    sdk: any
-  cupertino_icons: any
+    sdk: flutter
+  cupertino_icons: ^1.0.8
   flutter_localizations:
-    sdk: any
+    sdk: flutter
   intl: any
-  provider: any
-  sqflite: any
-  package_info_plus: any
-  dynamic_color: any
-  animations: any
-  device_info_plus: any
-  uuid: any
-  expandable: any
-  fl_chart: any
-  flutter_svg: any
-  percent_indicator: any
-  flutter_markdown: any
-  markdown: any
-  html: any
-  flutter_html: any
-  sqlite3_flutter_libs: any
-  sqflite_common_ffi: any
-  contextmenu: any
-  sentry_flutter: any
-  flutter_dotenv: any
-  flutter_reorderable_list: any
-  pie_chart: any
-  segmented_button_slide: any
-  http: any
-  timezone: any
-  flutter_custom_tabs: any
-  url_launcher: any
-  shared_preferences: any
+  provider: ^6.1.5
+  sqflite: ^2.4.2
+  package_info_plus: ^8.0.0
+  dynamic_color: ^1.8.1
+  animations: ^2.1.0
+  device_info_plus: ^11.2.1
+  uuid: ^4.5.1
+  expandable: ^5.0.1
+  fl_chart: ^1.1.1
+  flutter_svg: ^2.2.1
+  percent_indicator: ^4.2.5
+  flutter_markdown: ^0.7.7+1
+  markdown: ^7.3.0
+  html: ^0.15.6
+  flutter_html: ^3.0.0
+  sqlite3_flutter_libs: ^0.5.40
+  sqflite_common_ffi: ^2.3.6
+  contextmenu: ^3.0.0
+  async: ^2.12.0
+  sentry_flutter: ^9.7.0
+  flutter_dotenv: ^6.0.0
+  flutter_reorderable_list: ^1.3.1
+  pie_chart: ^5.4.0
+  segmented_button_slide: ^2.0.0
+  http: ^1.5.0
+  timezone: ^0.10.1
+  flutter_custom_tabs: ^2.4.0
+  url_launcher: ^6.1.11
+  shared_preferences: ^2.5.3
 
 flutter:
   generate: true
-  
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
   assets:
     - assets/icon/icon-ios.png
     - assets/icon/icon-android-adap.png
@@ -90,29 +59,3 @@ flutter:
     - assets/resources/github.svg
     - assets/resources/google-play.svg
     - .env
-
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
