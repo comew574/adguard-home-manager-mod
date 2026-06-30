@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:adguard_home_manager/l10n/app_localizations.dart';
 
 
 import 'package:adguard_home_manager/screens/home/status_box.dart';
+import 'package:adguard_home_manager/screens/filters/modals/custom_rules/add_custom_rule.dart';
 import 'package:adguard_home_manager/providers/filtering_provider.dart';
 import 'package:adguard_home_manager/providers/clients_provider.dart';
 
@@ -77,33 +80,73 @@ class ServerStatusWidget extends StatelessWidget {
 
   void _showCustomRules(BuildContext context) {
     final filteringProvider = Provider.of<FilteringProvider>(context, listen: false);
-    final rules = filteringProvider.filtering?.userRules ?? [];
+    final width = MediaQuery.of(context).size.width;
 
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('自定义规则'),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: rules.isEmpty
-            ? const Center(child: Text('暂无自定义规则'))
-            : SizedBox(
-                height: 300,
-                child: ListView.builder(
-                  itemCount: rules.length,
-                  itemBuilder: (_, i) => ListTile(
-                    dense: true,
-                    title: Text(
-                      rules[i],
-                      style: const TextStyle(fontSize: 13, fontFamily: 'monospace'),
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          final rules = filteringProvider.filtering?.userRules ?? [];
+
+          return AlertDialog(
+            title: Row(
+              children: [
+                const Text('自定义规则'),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    showGeneralDialog(
+                      context: context,
+                      barrierColor: Colors.black54,
+                      transitionBuilder: (context, anim1, anim2, child) {
+                        return SlideTransition(
+                          position: Tween(
+                            begin: const Offset(0, 1),
+                            end: const Offset(0, 0)
+                          ).animate(
+                            CurvedAnimation(parent: anim1, curve: Curves.easeInOutCubicEmphasized)
+                          ),
+                          child: child,
+                        );
+                      },
+                      pageBuilder: (ctx2, animation, secondaryAnimation) => AddCustomRule(
+                        fullScreen: !(width > 700 || !(Platform.isAndroid || Platform.isIOS)),
+                        onConfirm: (rule) async {
+                          final result = await filteringProvider.addCustomRule(rule);
+                          if (ctx2.mounted) Navigator.pop(ctx2);
+                          setDialogState(() {});
+                        },
+                      ),
+                    );
+                  },
+                  tooltip: '添加规则',
+                ),
+              ],
+            ),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: rules.isEmpty
+                ? const Center(child: Text('暂无自定义规则'))
+                : SizedBox(
+                    height: 300,
+                    child: ListView.builder(
+                      itemCount: rules.length,
+                      itemBuilder: (_, i) => ListTile(
+                        dense: true,
+                        title: Text(
+                          rules[i],
+                          style: const TextStyle(fontSize: 13, fontFamily: 'monospace'),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('关闭')),
-        ],
+            ),
+            actions: [
+              TextButton(onPressed: () => Navigator.pop(context), child: const Text('关闭')),
+            ],
+          );
+        }
       ),
     );
   }
