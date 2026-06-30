@@ -21,7 +21,7 @@ class ServerStatusWidget extends StatelessWidget {
     final textScaleFactor = MediaQuery.of(context).textScaler.scale(1);
 
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 4),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -33,7 +33,7 @@ class ServerStatusWidget extends StatelessWidget {
               color: Theme.of(context).colorScheme.onSurface
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           GridView(
             primary: false,
             shrinkWrap: true,

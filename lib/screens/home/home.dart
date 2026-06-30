@@ -131,9 +131,9 @@ class _HomeState extends State<Home> {
                                 crossAxisCount: 2,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                mainAxisSpacing: 10,
-                                crossAxisSpacing: 10,
-                                childAspectRatio: 1.6,
+                                mainAxisSpacing: 6,
+                                crossAxisSpacing: 6,
+                                childAspectRatio: 1.5,
                                 children: [
                                   _StatCard(
                                     label: AppLocalizations.of(context)!.dnsQueries,
@@ -237,7 +237,7 @@ class _StatCard extends StatelessWidget {
         color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.5),
         borderRadius: BorderRadius.circular(12),
       ),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
