@@ -55,12 +55,12 @@ class _HomeChartState extends State<HomeChart> {
       return Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: compact ? 16 : 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                    bottom: !isEmpty ? (compact ? 4 : 10) : 15
+                    bottom: !isEmpty ? (widget.compact ? 4 : 10) : 15
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -150,7 +150,7 @@ class _HomeChartState extends State<HomeChart> {
                 ),
                 if (!isEmpty) SizedBox(
                   width: double.maxFinite,
-                  height: compact ? 100 : 150,
+                  height: widget.compact ? 100 : 150,
                   child: CustomLineChart(
                     data: widget.data, 
                     color: widget.color,
