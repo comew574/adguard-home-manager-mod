@@ -127,37 +127,42 @@ class _HomeState extends State<Home> {
 
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16),
-                              child: GridView.count(
-                                crossAxisCount: 2,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                mainAxisSpacing: 6,
-                                crossAxisSpacing: 6,
-                                childAspectRatio: 1.5,
+                              child: Column(
                                 children: [
-                                  _StatCard(
-                                    label: AppLocalizations.of(context)!.dnsQueries,
-                                    value: intFormat(statusProvider.serverStatus!.stats.numDnsQueries, Platform.localeName),
-                                    sub: "${doubleFormat(statusProvider.serverStatus!.stats.avgProcessingTime*1000, Platform.localeName)} ms",
-                                    color: Colors.blue,
+                                  Row(
+                                    children: [
+                                      Expanded(child: SizedBox(height: 60, child: _StatCard(
+                                        label: AppLocalizations.of(context)!.dnsQueries,
+                                        value: intFormat(statusProvider.serverStatus!.stats.numDnsQueries, Platform.localeName),
+                                        sub: "${doubleFormat(statusProvider.serverStatus!.stats.avgProcessingTime*1000, Platform.localeName)} ms",
+                                        color: Colors.blue,
+                                      ))),
+                                      const SizedBox(width: 6),
+                                      Expanded(child: SizedBox(height: 60, child: _StatCard(
+                                        label: AppLocalizations.of(context)!.blockedFilters,
+                                        value: intFormat(statusProvider.serverStatus!.stats.numBlockedFiltering, Platform.localeName),
+                                        sub: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numBlockedFiltering/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
+                                        color: Colors.red,
+                                      ))),
+                                    ],
                                   ),
-                                  _StatCard(
-                                    label: AppLocalizations.of(context)!.blockedFilters,
-                                    value: intFormat(statusProvider.serverStatus!.stats.numBlockedFiltering, Platform.localeName),
-                                    sub: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numBlockedFiltering/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
-                                    color: Colors.red,
-                                  ),
-                                  _StatCard(
-                                    label: AppLocalizations.of(context)!.malwarePhishingBlocked,
-                                    value: intFormat(statusProvider.serverStatus!.stats.numReplacedSafebrowsing, Platform.localeName),
-                                    sub: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numReplacedSafebrowsing/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
-                                    color: Colors.green,
-                                  ),
-                                  _StatCard(
-                                    label: AppLocalizations.of(context)!.blockedAdultWebsites,
-                                    value: intFormat(statusProvider.serverStatus!.stats.numReplacedParental, Platform.localeName),
-                                    sub: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numReplacedParental/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
-                                    color: Colors.orange,
+                                  const SizedBox(height: 6),
+                                  Row(
+                                    children: [
+                                      Expanded(child: SizedBox(height: 60, child: _StatCard(
+                                        label: AppLocalizations.of(context)!.malwarePhishingBlocked,
+                                        value: intFormat(statusProvider.serverStatus!.stats.numReplacedSafebrowsing, Platform.localeName),
+                                        sub: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numReplacedSafebrowsing/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
+                                        color: Colors.green,
+                                      ))),
+                                      const SizedBox(width: 6),
+                                      Expanded(child: SizedBox(height: 60, child: _StatCard(
+                                        label: AppLocalizations.of(context)!.blockedAdultWebsites,
+                                        value: intFormat(statusProvider.serverStatus!.stats.numReplacedParental, Platform.localeName),
+                                        sub: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numReplacedParental/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
+                                        color: Colors.orange,
+                                      ))),
+                                    ],
                                   ),
                                 ],
                               ),
