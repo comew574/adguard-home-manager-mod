@@ -239,8 +239,7 @@ class _LayoutState extends State<Layout> with WidgetsBindingObserver {
           ),
         ),
       ),
-    ),
-  );
+    );
     }
   }
 }
