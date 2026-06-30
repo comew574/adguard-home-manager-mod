@@ -98,6 +98,24 @@ class TopItemsLists extends StatelessWidget {
       }
     }
 
+    void _showFullList(BuildContext context, {required String label, required List<Map<String, dynamic>> data, required String Function(dynamic) buildValue, required List<MenuOption> Function(dynamic) menuOptions, void Function(dynamic)? onTapEntry, required double width, bool isClient = false}) {
+      if (width > 700) {
+        showDialog(context: context, builder: (ctx) => TopItemsScreen(
+          type: isClient ? HomeTopItems.recurrentClients : HomeTopItems.queriedDomains,
+          title: label, isClient: isClient, data: data, withProgressBar: true,
+          buildValue: buildValue, options: (_) => menuOptions(_), onTapEntry: onTapEntry,
+          isFullscreen: false,
+        ));
+      } else {
+        Navigator.push(context, MaterialPageRoute(builder: (ctx) => TopItemsScreen(
+          type: isClient ? HomeTopItems.recurrentClients : HomeTopItems.queriedDomains,
+          title: label, isClient: isClient, data: data, withProgressBar: true,
+          buildValue: buildValue, options: (_) => menuOptions(_), onTapEntry: onTapEntry,
+          isFullscreen: true,
+        )));
+      }
+    }
+
     Widget buildCompactCard({
       required String label,
       required Color color,
