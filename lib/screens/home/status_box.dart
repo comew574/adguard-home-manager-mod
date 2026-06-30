@@ -7,12 +7,14 @@ class StatusBox extends StatelessWidget {
   final IconData icon;
   final String label;
   final bool isEnabled;
+  final VoidCallback? onTap;
 
   const StatusBox({
     super.key,
     required this.icon,
     required this.label,
-    required this.isEnabled
+    required this.isEnabled,
+    this.onTap,
   });
 
   @override
@@ -35,27 +37,31 @@ class StatusBox extends StatelessWidget {
             : Colors.red,
         borderRadius: BorderRadius.circular(16)
       ),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: appConfigProvider.useThemeColorForStatus == true
-              ? Theme.of(context).colorScheme.primary.computeLuminance() > 0.5 ? Colors.black : Colors.white
-              : Colors.grey.computeLuminance() > 0.5 ? Colors.black : Colors.white,
-          ),
-          const SizedBox(width: 12),
-          Flexible(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: appConfigProvider.useThemeColorForStatus == true
-                  ? Theme.of(context).colorScheme.primary.computeLuminance() > 0.5 ? Colors.black : Colors.white
-                  : Colors.grey.computeLuminance() > 0.5 ? Colors.black : Colors.white,
-                fontWeight: FontWeight.w500
-              ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: appConfigProvider.useThemeColorForStatus == true
+                ? Theme.of(context).colorScheme.primary.computeLuminance() > 0.5 ? Colors.black : Colors.white
+                : Colors.grey.computeLuminance() > 0.5 ? Colors.black : Colors.white,
             ),
-          )
-        ],
+            const SizedBox(width: 12),
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: appConfigProvider.useThemeColorForStatus == true
+                    ? Theme.of(context).colorScheme.primary.computeLuminance() > 0.5 ? Colors.black : Colors.white
+                    : Colors.grey.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+                  fontWeight: FontWeight.w500
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
