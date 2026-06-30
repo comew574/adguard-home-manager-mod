@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import 'package:provider/provider.dart';
@@ -176,9 +178,11 @@ class _LayoutState extends State<Layout> with WidgetsBindingObserver {
             padding: const EdgeInsets.only(left: 28, right: 28, bottom: 20),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(32),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface.withOpacity(0.08),
+              child: BackdropFilter(
+                filter: ui.ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface.withOpacity(0.02),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.12),
@@ -190,7 +194,7 @@ class _LayoutState extends State<Layout> with WidgetsBindingObserver {
                     color: Theme.of(context).colorScheme.outlineVariant.withOpacity(0.25),
                   ),
                 ),
-                  height: 60,
+                  height: 42,
                   child: Center(
                     child: NavigationBar(
                       backgroundColor: Colors.transparent,
@@ -235,6 +239,7 @@ class _LayoutState extends State<Layout> with WidgetsBindingObserver {
             )).toList(),
                 ),
               ),
+            ),
             ),
           ),
         ),
