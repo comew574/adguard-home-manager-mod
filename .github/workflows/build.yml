@@ -13,10 +13,11 @@ jobs:
       - run: cp -n .env.sample .env || true
       - run: flutter pub get
       - run: keytool -genkey -v -keystore upload-keystore.jks -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -alias upload -dname "CN=CI,OU=CI,O=CI,L=CI,S=CI,C=CN"
-      - run: echo "storePassword=android
-keyPassword=android
-keyAlias=upload
-storeFile=../upload-keystore.jks" > android/key.properties
+      - run: |
+          echo "storePassword=android" > android/key.properties
+          echo "keyPassword=android" >> android/key.properties
+          echo "keyAlias=upload" >> android/key.properties
+          echo "storeFile=../upload-keystore.jks" >> android/key.properties
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
