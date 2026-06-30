@@ -349,29 +349,14 @@ class _ClientsListState extends State<ClientsList> {
       refreshIndicatorOffset: 0,
       fab: FloatingActionButton(
         onPressed: () {
-          if (width > 900 || !(Platform.isAndroid || Platform.isIOS)) {
-            showDialog(
-              context: context, 
-              builder: (context) => AddClientModal(
-                type: widget.type,
-                onConfirm: confirmAddItem,
-                dialog: true,
-              ),
-            );
-          }
-          else {
-            showModalBottomSheet(
-              context: context, 
-              useRootNavigator: true,
-              builder: (context) => AddClientModal(
-                type: widget.type,
-                onConfirm: confirmAddItem,
-                dialog: false,
-              ),
-              backgroundColor: Colors.transparent,
-              isScrollControlled: true
-            );
-          }
+          showDialog(
+            context: context, 
+            builder: (context) => AddClientModal(
+              type: widget.type,
+              onConfirm: confirmAddItem,
+              dialog: true,
+            ),
+          );
         },
         child: const Icon(Icons.add),
       ),
