@@ -16,6 +16,7 @@ class HomeChart extends StatefulWidget {
   final int hoursInterval;
   final void Function() onTapTitle;
   final bool isDesktop;
+  final bool compact;
 
   const HomeChart({
     super.key,
@@ -27,6 +28,7 @@ class HomeChart extends StatefulWidget {
     required this.hoursInterval,
     required this.onTapTitle,
     required this.isDesktop,
+    this.compact = false,
   });
 
   @override
@@ -53,12 +55,12 @@ class _HomeChartState extends State<HomeChart> {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: compact ? 16 : 16),
             child: Column(
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                    bottom: !isEmpty ? 10 : 15
+                    bottom: !isEmpty ? (compact ? 4 : 10) : 15
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -148,7 +150,7 @@ class _HomeChartState extends State<HomeChart> {
                 ),
                 if (!isEmpty) SizedBox(
                   width: double.maxFinite,
-                  height: 150,
+                  height: compact ? 100 : 150,
                   child: CustomLineChart(
                     data: widget.data, 
                     color: widget.color,

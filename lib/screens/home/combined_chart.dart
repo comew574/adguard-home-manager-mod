@@ -38,7 +38,8 @@ class CombinedChartItem {
 }
 
 class CombinedHomeChart extends StatelessWidget {
-  const CombinedHomeChart({super.key});
+  final bool compact;
+  const CombinedHomeChart({super.key, this.compact = false});
 
   List<int>? removeZero(List<int> list) {
     final removed = list.where((i) => i > 0);
@@ -117,15 +118,17 @@ class CombinedHomeChart extends StatelessWidget {
       if (width > 700) {
         return Column(
           children: [
-            Text(
-              AppLocalizations.of(context)!.statistics,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).colorScheme.onSurface
+            if (!compact) ...[
+              Text(
+                AppLocalizations.of(context)!.statistics,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.onSurface
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
+            ],
             Row(
               children: [
                 Expanded(
@@ -195,15 +198,17 @@ class CombinedHomeChart extends StatelessWidget {
           children: [
             Column(
               children: [
-                Text(
-                  AppLocalizations.of(context)!.statistics,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.onSurface
+                if (!compact) ...[
+                  Text(
+                    AppLocalizations.of(context)!.statistics,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
+                  const SizedBox(height: 16),
+                ],
                 SizedBox(
                   height: 300,
                   width: double.maxFinite,
