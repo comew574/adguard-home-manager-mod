@@ -8,14 +8,11 @@ import 'package:provider/provider.dart';
 import 'package:adguard_home_manager/l10n/app_localizations.dart';
 
 import 'package:adguard_home_manager/screens/home/server_status.dart';
-import 'package:adguard_home_manager/screens/home/combined_chart.dart';
-import 'package:adguard_home_manager/screens/home/chart.dart';
 import 'package:adguard_home_manager/screens/home/appbar.dart';
 import 'package:adguard_home_manager/screens/home/fab.dart';
 import 'package:adguard_home_manager/screens/home/top_items/top_items_lists.dart';
 
 import 'package:adguard_home_manager/providers/clients_provider.dart';
-import 'package:adguard_home_manager/providers/logs_provider.dart';
 import 'package:adguard_home_manager/functions/number_format.dart';
 import 'package:adguard_home_manager/constants/enums.dart';
 import 'package:adguard_home_manager/providers/status_provider.dart';
@@ -66,7 +63,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final statusProvider = Provider.of<StatusProvider>(context);
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
-    final logsProvider = Provider.of<LogsProvider>(context);
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -139,79 +135,40 @@ class _HomeState extends State<Home> {
 
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16),
-                              child: CombinedHomeChart(compact: true),
-                            ),
-                            const SizedBox(height: 16),
-
-                            HomeChart(
-                              data: statusProvider.serverStatus!.stats.dnsQueries, 
-                              label: AppLocalizations.of(context)!.dnsQueries, 
-                              primaryValue: intFormat(statusProvider.serverStatus!.stats.numDnsQueries, Platform.localeName), 
-                              secondaryValue: "${doubleFormat(statusProvider.serverStatus!.stats.avgProcessingTime*1000, Platform.localeName)} ms",
-                              color: Colors.blue,
-                              hoursInterval: statusProvider.serverStatus!.stats.timeUnits == "days" ? 24 : 1,
-                              onTapTitle: () {
-                                logsProvider.setSelectedResultStatus(
-                                  value: "all",
-                                  refetch: true
-                                );
-                                logsProvider.filterLogs();
-                                appConfigProvider.setSelectedScreen(2);
-                              },
-                              isDesktop: width > 700,
-                              compact: true,
-                            ),
-                            HomeChart(
-                              data: statusProvider.serverStatus!.stats.blockedFiltering, 
-                              label: AppLocalizations.of(context)!.blockedFilters, 
-                              primaryValue: intFormat(statusProvider.serverStatus!.stats.numBlockedFiltering, Platform.localeName), 
-                              secondaryValue: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numBlockedFiltering/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
-                              color: Colors.red,
-                              hoursInterval: statusProvider.serverStatus!.stats.timeUnits == "days" ? 24 : 1,
-                              onTapTitle: () {
-                                logsProvider.setSelectedResultStatus(
-                                  value: "blocked",
-                                  refetch: true
-                                );
-                                appConfigProvider.setSelectedScreen(2);
-                              },
-                              isDesktop: width > 700,
-                              compact: true,
-                            ),
-                            HomeChart(
-                              data: statusProvider.serverStatus!.stats.replacedSafebrowsing, 
-                              label: AppLocalizations.of(context)!.malwarePhishingBlocked, 
-                              primaryValue: intFormat(statusProvider.serverStatus!.stats.numReplacedSafebrowsing, Platform.localeName), 
-                              secondaryValue: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numReplacedSafebrowsing/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
-                              color: Colors.green,
-                              hoursInterval: statusProvider.serverStatus!.stats.timeUnits == "days" ? 24 : 1,
-                              onTapTitle: () {
-                                logsProvider.setSelectedResultStatus(
-                                  value: "blocked_safebrowsing",
-                                  refetch: true
-                                );
-                                appConfigProvider.setSelectedScreen(2);
-                              },
-                              isDesktop: width > 700,
-                              compact: true,
-                            ),
-                            HomeChart(
-                              data: statusProvider.serverStatus!.stats.replacedParental, 
-                              label: AppLocalizations.of(context)!.blockedAdultWebsites, 
-                              primaryValue: intFormat(statusProvider.serverStatus!.stats.numReplacedParental, Platform.localeName), 
-                              secondaryValue: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numReplacedParental/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
-                              color: Colors.orange,
-                              hoursInterval: statusProvider.serverStatus!.stats.timeUnits == "days" ? 24 : 1,
-                              onTapTitle: () {
-                                logsProvider.setSelectedResultStatus(
-                                  value: "blocked_parental",
-                                  refetch: true
-                                );
-                                logsProvider.filterLogs();
-                                appConfigProvider.setSelectedScreen(2);
-                              },
-                              isDesktop: width > 700,
-                              compact: true,
+                              child: GridView.count(
+                                crossAxisCount: 2,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 10,
+                                childAspectRatio: 1.6,
+                                children: [
+                                  _StatCard(
+                                    label: AppLocalizations.of(context)!.dnsQueries,
+                                    value: intFormat(statusProvider.serverStatus!.stats.numDnsQueries, Platform.localeName),
+                                    sub: "${doubleFormat(statusProvider.serverStatus!.stats.avgProcessingTime*1000, Platform.localeName)} ms",
+                                    color: Colors.blue,
+                                  ),
+                                  _StatCard(
+                                    label: AppLocalizations.of(context)!.blockedFilters,
+                                    value: intFormat(statusProvider.serverStatus!.stats.numBlockedFiltering, Platform.localeName),
+                                    sub: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numBlockedFiltering/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
+                                    color: Colors.red,
+                                  ),
+                                  _StatCard(
+                                    label: AppLocalizations.of(context)!.malwarePhishingBlocked,
+                                    value: intFormat(statusProvider.serverStatus!.stats.numReplacedSafebrowsing, Platform.localeName),
+                                    sub: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numReplacedSafebrowsing/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
+                                    color: Colors.green,
+                                  ),
+                                  _StatCard(
+                                    label: AppLocalizations.of(context)!.blockedAdultWebsites,
+                                    value: intFormat(statusProvider.serverStatus!.stats.numReplacedParental, Platform.localeName),
+                                    sub: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numReplacedParental/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
+                                    color: Colors.orange,
+                                  ),
+                                ],
+                              ),
                             ),
 
                             TopItemsLists(order: appConfigProvider.homeTopItemsOrder),
@@ -263,6 +220,81 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _StatCard extends StatelessWidget {
+  final String label;
+  final String value;
+  final String sub;
+  final Color color;
+
+  const _StatCard({
+    required this.label,
+    required this.value,
+    required this.sub,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const Spacer(),
+          Row(
+            children: [
+              Container(
+                width: 4,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      value,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: color,
+                      ),
+                    ),
+                    Text(
+                      sub,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: color.withOpacity(0.7),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
