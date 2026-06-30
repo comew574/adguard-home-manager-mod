@@ -8,9 +8,7 @@ import 'package:adguard_home_manager/l10n/app_localizations.dart';
 
 import 'package:adguard_home_manager/screens/home/top_items/row_item.dart';
 import 'package:adguard_home_manager/screens/home/top_items/top_items_screen.dart';
-import 'package:adguard_home_manager/widgets/custom_pie_chart.dart';
 
-import 'package:adguard_home_manager/functions/number_format.dart';
 import 'package:adguard_home_manager/models/menu_option.dart';
 import 'package:adguard_home_manager/constants/enums.dart';
 
@@ -49,223 +47,110 @@ class TopItemsSection extends StatelessWidget {
 
     final width = MediaQuery.of(context).size.width;
 
-    final withChart = type != HomeTopItems.avgUpstreamResponseTime;
-
-    Map<String, double> ringData() {
-      Map<String, double> values = {};
-      data.sublist(0, data.length > 5 ? 5 : data.length).forEach((element) {
-        values = {
-          ...values,
-          element.keys.first: element.values.first.toDouble()
-        };
-      });
-      if (data.length > 5) {
-        final int rest = List<int>.from(
-          data.sublist(5, data.length).map((e) => e.values.first.toInt())
-        ).reduce((a, b) => a + b);
-        values = {
-          ...values,
-          AppLocalizations.of(context)!.others: rest.toDouble()
-        };
-      }
-      return values;
-    }
-
-    List<Map<String, dynamic>> lineData() {
-      List<Map<String, dynamic>> values = [];
-      data.sublist(0, data.length > 5 ? 5 : data.length).forEach((element) {
-        values.add({
-          "label": element.keys.first,
-          "value": element.values.first.toDouble()
-        });
-      });
-      if (data.length > 5) {
-        final int rest = List<int>.from(
-          data.sublist(5, data.length).map((e) => e.values.first.toInt())
-        ).reduce((a, b) => a + b);
-        values.add({
-          "label": AppLocalizations.of(context)!.others,
-          "value": rest.toDouble()
-        });
-      }
-      return values;
-    }
-
-    final List<Map<String, dynamic>> lineChartData = lineData();
-    final mapData = lineChartData.map((e) => e["value"]);
-    final double total = mapData.isNotEmpty 
-      ? mapData.reduce((a, b) => a + b) 
-      : 0;
-
     return SizedBox(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (data.isEmpty) _NoData(label: label),
-          if (data.isNotEmpty && width > 700) Padding(
-            padding: EdgeInsets.only(bottom: withChart == false ? 16 : 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                if (withChart == true) Expanded(
-                  flex: 1,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 250
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: CustomPieChart(
-                        data: ringData(),
-                        colors: colors
-                      )
-                    ),
-                  )
+          if (data.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                          bottom: 16
-                        ),
-                        child: Text(
-                          label,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500
-                          ),
-                        ),
-                      ),
-                      _ItemsList(
-                        colors: colors, 
-                        data: data, 
-                        clients: type == HomeTopItems.recurrentClients, 
-                        type: type, 
-                        showChart: withChart,
-                        buildValue: buildValue,
-                        menuOptions: menuOptions,
-                        onTapEntry: onTapEntry,
-                      ),
-                      if (withChart == true) OthersRowItem(
-                        items: data,
-                        showColor: true,
-                      )
-                    ]
-                  ),
-                )
-              ],
-            ),
-          ),
-          if (data.isNotEmpty && width <= 700) ...[
-            Text(
-              label,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).colorScheme.onSurface
               ),
             ),
             const SizedBox(height: 8),
-            if (withChart == true) Padding(
-              padding: const EdgeInsets.all(16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: SizedBox(
-                  height: 20,
-                  child: LayoutBuilder(
-                    builder: (context, constraints) => Row(
-                      children: lineChartData.asMap().entries.map((e) => Tooltip(
-                        message:'${e.value["label"]} (${doubleFormat((e.value["value"]/total)*100, Platform.localeName)}%)',
-                        child: Container(
-                          width: constraints.maxWidth*(e.value["value"]/total),
-                          decoration: BoxDecoration(
-                            color: colors[e.key]
-                          ),
-                        ),
-                      )).toList()
-                    )
-                  )
-                ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(12),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: _ItemsList(
-                colors: colors, 
-                data: data, 
-                clients: type == HomeTopItems.recurrentClients,
-                type: type, 
-                showChart: withChart,
-                buildValue: buildValue,
-                menuOptions: menuOptions,
-                onTapEntry: onTapEntry,
-              ),
-            ),
-            OthersRowItem(
-              items: data,
-              showColor: withChart,
-            ),
-          ],
-          
-          if (data.length > 5) ...[            
-            Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              child: Column(
                 children: [
-                  TextButton(
-                    onPressed: () => {
-                      if (width > 700) {
-                        showDialog(
-                          context: context, 
-                          builder: (context) => TopItemsScreen(
-                            type: type,
-                            title: label,
-                            isClient: type == HomeTopItems.recurrentClients, 
-                            data: data,
-                            withProgressBar: withProgressBar,
-                            buildValue: buildValue,
-                            options: menuOptions,
-                            onTapEntry: onTapEntry,
-                            isFullscreen: !(width > 700 || !(Platform.isAndroid | Platform.isIOS)),
-                          ),
-                        )
-                      }
-                      else {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => TopItemsScreen(
-                            type: type,
-                            title: label,
-                            isClient: type == HomeTopItems.recurrentClients, 
-                            data: data,
-                            withProgressBar: withProgressBar,
-                            buildValue: buildValue,
-                            options: menuOptions,
-                            onTapEntry: onTapEntry,
-                            isFullscreen: !(width > 700 || !(Platform.isAndroid | Platform.isIOS)),
-                          ),
-                        ))
-                      }
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(AppLocalizations.of(context)!.viewMore),
-                        const SizedBox(width: 10),
-                        const Icon(
-                          Icons.arrow_forward,
-                          size: 20,
-                        )
-                      ],
-                    )
+                  _ItemsList(
+                    colors: colors, 
+                    data: data, 
+                    clients: type == HomeTopItems.recurrentClients, 
+                    type: type, 
+                    showChart: false,
+                    buildValue: buildValue,
+                    menuOptions: menuOptions,
+                    onTapEntry: onTapEntry,
                   ),
+                  if (data.length > 5) ...[                  
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () => {
+                              if (width > 700) {
+                                showDialog(
+                                  context: context, 
+                                  builder: (context) => TopItemsScreen(
+                                    type: type,
+                                    title: label,
+                                    isClient: type == HomeTopItems.recurrentClients, 
+                                    data: data,
+                                    withProgressBar: withProgressBar,
+                                    buildValue: buildValue,
+                                    options: menuOptions,
+                                    onTapEntry: onTapEntry,
+                                    isFullscreen: !(width > 700 || !(Platform.isAndroid | Platform.isIOS)),
+                                  ),
+                                )
+                              }
+                              else {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => TopItemsScreen(
+                                    type: type,
+                                    title: label,
+                                    isClient: type == HomeTopItems.recurrentClients, 
+                                    data: data,
+                                    withProgressBar: withProgressBar,
+                                    buildValue: buildValue,
+                                    options: menuOptions,
+                                    onTapEntry: onTapEntry,
+                                    isFullscreen: !(width > 700 || !(Platform.isAndroid | Platform.isIOS)),
+                                  ),
+                                ))
+                              }
+                            },
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.viewMore,
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                const SizedBox(width: 4),
+                                const Icon(
+                                  Icons.chevron_right,
+                                  size: 16,
+                                )
+                              ],
+                            )
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
           ]
         ],
       ),
@@ -324,21 +209,15 @@ class _NoData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          label,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            color: Theme.of(context).colorScheme.onSurface
-          ),
-        ),
-        const SizedBox(height: 24),
-        Text(
-          AppLocalizations.of(context)!.noDataThisSection,
-          style: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
         const SizedBox(height: 16),

@@ -54,8 +54,8 @@ class RowItem extends StatelessWidget {
         onTap: onTapEntry,
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 8
+            horizontal: 16,
+            vertical: 10
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,12 +63,12 @@ class RowItem extends StatelessWidget {
               Flexible(
                 child: Row(
                   children: [
-                    if (showColor == true) Container(
-                      margin: const EdgeInsets.only(right: 16),
-                      width: 12,
-                      height: 12,
+                    Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      width: 3,
+                      height: 24,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(2),
                         color: chartColor
                       ),
                     ),
