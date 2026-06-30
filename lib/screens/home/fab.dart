@@ -13,28 +13,13 @@ class HomeFab extends StatelessWidget {
   Widget build(BuildContext context) {
     final statusProvider = Provider.of<StatusProvider>(context);
 
-    final width = MediaQuery.of(context).size.width;
-
     void openManagementBottomSheet() {
-      if (width > 700) {
-        showDialog(
-          context: context,
-          builder: (context) => const ManagementModal(
-            dialog: true,
-          ),
-        );
-      }
-      else {
-        showModalBottomSheet(
-          context: context, 
-          isScrollControlled: true,
-          useRootNavigator: true,
-          builder: (context) => const ManagementModal(
-            dialog: false,
-          ),
-          backgroundColor: Colors.transparent,
-        );
-      }
+      showDialog(
+        context: context,
+        builder: (context) => const ManagementModal(
+          dialog: true,
+        ),
+      );
     }
 
     return statusProvider.loadStatus == LoadStatus.loaded
