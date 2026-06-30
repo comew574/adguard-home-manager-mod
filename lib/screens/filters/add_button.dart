@@ -183,29 +183,14 @@ class AddFiltersButton extends StatelessWidget {
     }
 
     void openAddWhitelistBlacklist() {
-      if (width > 700 || !(Platform.isAndroid || Platform.isIOS)) {
-        showDialog(
-          context: context, 
-          builder: (ctx) => AddListModal(
-            type: type,
-            onConfirm: confirmAddList,
-            dialog: true,
-          ),
-        );
-      }
-      else {
-        showModalBottomSheet(
-          context: context, 
-          useRootNavigator: true,
-          builder: (ctx) => AddListModal(
-            type: type,
-            onConfirm: confirmAddList,
-            dialog: false,
-          ),
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent
-        );
-      }
+      showDialog(
+        context: context, 
+        builder: (ctx) => AddListModal(
+          type: type,
+          onConfirm: confirmAddList,
+          dialog: true,
+        ),
+      );
     }
 
     switch (type) {
