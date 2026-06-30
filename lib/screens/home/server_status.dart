@@ -19,8 +19,8 @@ class ServerStatusWidget extends StatelessWidget {
 
   void _showBlockList(BuildContext context) {
     final clientsProvider = Provider.of<ClientsProvider>(context, listen: false);
-    final blocked = clientsProvider.clients?.clientsAllowedBlocked?.disallowed ?? [];
-    final allowed = clientsProvider.clients?.clientsAllowedBlocked?.allowed ?? [];
+    final blocked = clientsProvider.clients?.clientsAllowedBlocked?.disallowedClients ?? [];
+    final allowed = clientsProvider.clients?.clientsAllowedBlocked?.allowedClients ?? [];
 
     showDialog(
       context: context,
