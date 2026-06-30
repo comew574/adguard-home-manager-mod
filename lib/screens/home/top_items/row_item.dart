@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:adguard_home_manager/l10n/app_localizations.dart';
 
-
 import 'package:adguard_home_manager/widgets/options_menu.dart';
-
 import 'package:adguard_home_manager/models/menu_option.dart';
 import 'package:adguard_home_manager/constants/enums.dart';
 import 'package:adguard_home_manager/providers/status_provider.dart';
@@ -52,10 +50,18 @@ class RowItem extends StatelessWidget {
         value: domain,
         options: options,
         onTap: onTapEntry,
-        child: Padding(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.06),
+                width: 1,
+              ),
+            ),
+          ),
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
-            vertical: 10
+            vertical: 12,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,14 +70,14 @@ class RowItem extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      width: 3,
-                      height: 24,
+                      width: 4,
+                      height: 32,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),
-                        color: chartColor
+                        color: chartColor.withOpacity(0.8),
                       ),
                     ),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,19 +85,20 @@ class RowItem extends StatelessWidget {
                           Text(
                             domain,
                             overflow: TextOverflow.ellipsis,
-                            style:  TextStyle(
-                              fontSize: 16,
-                              color: Theme.of(context).colorScheme.onSurface
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                           if (name != null) ...[
-                            const SizedBox(height: 5),
+                            const SizedBox(height: 2),
                             Text(
                               name,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).colorScheme.onSurfaceVariant
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ]
@@ -101,13 +108,22 @@ class RowItem extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 16),
-              Text(
-                number,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface
+              const SizedBox(width: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: chartColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-              )
+                child: Text(
+                  number,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: chartColor,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -132,53 +148,62 @@ class OthersRowItem extends StatelessWidget {
       return const SizedBox();
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 8
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.06),
+            width: 1,
+          ),
+        ),
       ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
             child: Row(
               children: [
-                if (showColor == true) Container(
-                  margin: const EdgeInsets.only(right: 16),
-                  width: 12,
-                  height: 12,
+                Container(
+                  width: 4,
+                  height: 32,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: Colors.grey
+                    borderRadius: BorderRadius.circular(2),
+                    color: Colors.grey.withOpacity(0.5),
                   ),
                 ),
+                const SizedBox(width: 12),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.others,
-                        overflow: TextOverflow.ellipsis,
-                        style:  TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.onSurface
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    AppLocalizations.of(context)!.others,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 16),
-          Text(
-            List<int>.from(
-              items.sublist(5, items.length).map((e) => e.values.first.toInt())
-            ).reduce((a, b) => a + b).toString(),
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
             ),
-          )
+            child: Text(
+              List<int>.from(
+                items.sublist(5, items.length).map((e) => e.values.first.toInt())
+              ).reduce((a, b) => a + b).toString(),
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey,
+              ),
+            ),
+          ),
         ],
       ),
     );
