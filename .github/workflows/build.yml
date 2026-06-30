@@ -12,7 +12,7 @@ jobs:
       - run: flutter --version
       - run: cp -n .env.sample .env || true
       - run: flutter pub get
-      - run: keytool -genkey -v -keystore android/upload-keystore.jks -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -alias upload -dname "CN=CI,OU=CI,O=CI,L=CI,S=CI,C=CN"
+      - run: keytool -genkey -v -keystore android/app/upload-keystore.jks -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -alias upload -dname "CN=CI,OU=CI,O=CI,L=CI,S=CI,C=CN"
       - run: |
           echo "storePassword=android" > android/key.properties
           echo "keyPassword=android" >> android/key.properties
