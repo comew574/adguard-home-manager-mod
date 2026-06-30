@@ -131,7 +131,7 @@ class _HomeState extends State<Home> {
                                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 4),
 
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16),
