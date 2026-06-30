@@ -1,23 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:adguard_home_manager/l10n/app_localizations.dart';
 
-
 import 'package:adguard_home_manager/screens/home/server_status.dart';
-import 'package:adguard_home_manager/screens/home/top_items/top_items_lists.dart';
 import 'package:adguard_home_manager/screens/home/combined_chart.dart';
 import 'package:adguard_home_manager/screens/home/appbar.dart';
 import 'package:adguard_home_manager/screens/home/fab.dart';
-import 'package:adguard_home_manager/screens/home/chart.dart';
 
 import 'package:adguard_home_manager/providers/clients_provider.dart';
-import 'package:adguard_home_manager/providers/logs_provider.dart';
-import 'package:adguard_home_manager/functions/number_format.dart';
 import 'package:adguard_home_manager/constants/enums.dart';
 import 'package:adguard_home_manager/providers/status_provider.dart';
 import 'package:adguard_home_manager/providers/app_config_provider.dart';
@@ -67,8 +60,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final statusProvider = Provider.of<StatusProvider>(context);
     final appConfigProvider = Provider.of<AppConfigProvider>(context);
-    final logsProvider = Provider.of<LogsProvider>(context);
-
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -139,95 +130,10 @@ class _HomeState extends State<Home> {
                             ),
                             const SizedBox(height: 16),
                                   
-                            if (appConfigProvider.combinedChartHome == false) Wrap(
-                              children: [
-                                FractionallySizedBox(
-                                  widthFactor: width > 700 ? 0.5 : 1,
-                                  child: HomeChart(
-                                    data: statusProvider.serverStatus!.stats.dnsQueries, 
-                                    label: AppLocalizations.of(context)!.dnsQueries, 
-                                    primaryValue: intFormat(statusProvider.serverStatus!.stats.numDnsQueries, Platform.localeName), 
-                                    secondaryValue: "${doubleFormat(statusProvider.serverStatus!.stats.avgProcessingTime*1000, Platform.localeName)} ms",
-                                    color: Colors.blue,
-                                    hoursInterval: statusProvider.serverStatus!.stats.timeUnits == "days" ? 24 : 1,
-                                    onTapTitle: () {
-                                      logsProvider.setSelectedResultStatus(
-                                        value: "all",
-                                        refetch: true
-                                      );
-                                      logsProvider.filterLogs();
-                                      appConfigProvider.setSelectedScreen(2);
-                                    },
-                                    isDesktop: width > 700,
-                                  ),
-                                ),
-                                FractionallySizedBox(
-                                  widthFactor: width > 700 ? 0.5 : 1,
-                                  child: HomeChart(
-                                    data: statusProvider.serverStatus!.stats.blockedFiltering, 
-                                    label: AppLocalizations.of(context)!.blockedFilters, 
-                                    primaryValue: intFormat(statusProvider.serverStatus!.stats.numBlockedFiltering, Platform.localeName), 
-                                    secondaryValue: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numBlockedFiltering/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
-                                    color: Colors.red,
-                                    hoursInterval: statusProvider.serverStatus!.stats.timeUnits == "days" ? 24 : 1,
-                                    onTapTitle: () {
-                                      logsProvider.setSelectedResultStatus(
-                                        value: "blocked",
-                                        refetch: true
-                                      );
-                                      appConfigProvider.setSelectedScreen(2);
-                                    },
-                                    isDesktop: width > 700,
-                                  ),
-                                ),
-                                FractionallySizedBox(
-                                  widthFactor: width > 700 ? 0.5 : 1,
-                                  child: HomeChart(
-                                    data: statusProvider.serverStatus!.stats.replacedSafebrowsing, 
-                                    label: AppLocalizations.of(context)!.malwarePhishingBlocked, 
-                                    primaryValue: intFormat(statusProvider.serverStatus!.stats.numReplacedSafebrowsing, Platform.localeName), 
-                                    secondaryValue: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numReplacedSafebrowsing/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
-                                    color: Colors.green,
-                                    hoursInterval: statusProvider.serverStatus!.stats.timeUnits == "days" ? 24 : 1,
-                                    onTapTitle: () {
-                                      logsProvider.setSelectedResultStatus(
-                                        value: "blocked_safebrowsing",
-                                        refetch: true
-                                      );
-                                      appConfigProvider.setSelectedScreen(2);
-                                    },
-                                    isDesktop: width > 700,
-                                  ),
-                                ),
-                                FractionallySizedBox(
-                                  widthFactor: width > 700 ? 0.5 : 1,
-                                  child: HomeChart(
-                                    data: statusProvider.serverStatus!.stats.replacedParental, 
-                                    label: AppLocalizations.of(context)!.blockedAdultWebsites, 
-                                    primaryValue: intFormat(statusProvider.serverStatus!.stats.numReplacedParental, Platform.localeName), 
-                                    secondaryValue: "${statusProvider.serverStatus!.stats.numDnsQueries > 0 ? doubleFormat((statusProvider.serverStatus!.stats.numReplacedParental/statusProvider.serverStatus!.stats.numDnsQueries)*100, Platform.localeName) : 0}%",
-                                    color: Colors.orange,
-                                    hoursInterval: statusProvider.serverStatus!.stats.timeUnits == "days" ? 24 : 1,
-                                    onTapTitle: () {
-                                      logsProvider.setSelectedResultStatus(
-                                        value: "blocked_parental",
-                                        refetch: true
-                                      );
-                                      logsProvider.filterLogs();
-                                      appConfigProvider.setSelectedScreen(2);
-                                    },
-                                    isDesktop: width > 700,
-                                  ),
-                                ),             
-                              ],
-                            ),
-
-                            if (appConfigProvider.combinedChartHome == true) const Padding(
+                            const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 16),
                               child: CombinedHomeChart(),
                             ),
-                                  
-                            TopItemsLists(order: appConfigProvider.homeTopItemsOrder),
 
                             const SizedBox(height: 16),
                           ],
